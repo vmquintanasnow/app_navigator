@@ -4,7 +4,8 @@ class NavigationLayer extends StatelessWidget {
   final Widget initPage;
   final String initPath;
 
-  NavigationLayer({Key? key, required this.initPage, required this.initPath}) : super(key: key) {
+  NavigationLayer({Key? key, required this.initPage, required this.initPath})
+      : super(key: key) {
     AppNavigator().pages.value = [AppPage(child: initPage, name: initPath)];
   }
 

@@ -19,10 +19,10 @@ class AppNavigator {
 
   //Navigation methods
   void push(
-      Widget child, {
-        bool fullScreenDialog = false,
-        required String name,
-      }) {
+    Widget child, {
+    bool fullScreenDialog = false,
+    required String name,
+  }) {
     pages.value = List.from(pages.value)
       ..add(AppPage(
         child: child,
@@ -32,10 +32,10 @@ class AppNavigator {
   }
 
   void pushAndReplaceAllStack(
-      Widget child, {
-        bool fullScreenDialog = false,
-        required String name,
-      }) {
+    Widget child, {
+    bool fullScreenDialog = false,
+    required String name,
+  }) {
     pages.value = [
       AppPage(
         child: child,
@@ -62,9 +62,9 @@ class AppNavigator {
   }
 
   void pushReplacement(
-      Widget child, {
-        required String name,
-      }) {
+    Widget child, {
+    required String name,
+  }) {
     pages.value = List.from(pages.value)
       ..last = AppPage(
         child: child,
@@ -74,11 +74,12 @@ class AppNavigator {
   }
 
   void replacement(
-      Widget child, {
-        required String name,
-        required String target,
-      }) {
-    final targetIndex = pages.value.indexWhere((element) => element.name == target);
+    Widget child, {
+    required String name,
+    required String target,
+  }) {
+    final targetIndex =
+        pages.value.indexWhere((element) => element.name == target);
     if (targetIndex >= 0) {
       final List<Page> pagesCopy = List.from(pages.value);
       pagesCopy[targetIndex] = AppPage(
@@ -120,4 +121,3 @@ class AppPage extends Page<dynamic> {
     );
   }
 }
-
