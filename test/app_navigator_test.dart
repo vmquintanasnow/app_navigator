@@ -29,10 +29,10 @@ void main() {
     test('navigation_tree', () {
       //  Setup
       //  Act
-      final navigationTree = appNavigator.navigationTree;
+      final navigationRoutes = appNavigator.navigationRoutes;
       //  Verify
-      expect(navigationTree.length, equals(1));
-      expect(navigationTree.first, equals(Page1.path));
+      expect(navigationRoutes.length, equals(1));
+      expect(navigationRoutes.first, equals(Page1.path));
     });
 
     //Test push method
@@ -43,7 +43,7 @@ void main() {
       //  Verify
       expect(appNavigator.currentPath, equals(Page2.path));
       expect(appNavigator.pages.value.length, equals(2));
-      expect(appNavigator.navigationTree.length, equals(2));
+      expect(appNavigator.navigationRoutes.length, equals(2));
     });
 
     // Test pushReplacement. Pushing a page must replace the last page on the tree
@@ -54,9 +54,9 @@ void main() {
       appNavigator.pushReplacement(const Page3(), name: Page3.path);
       //  Verify
       expect(appNavigator.currentPath, equals(Page3.path));
-      expect(appNavigator.navigationTree, contains(Page1.path));
-      expect(appNavigator.navigationTree, contains(Page3.path));
-      expect(appNavigator.navigationTree, isNot(contains(Page2.path)));
+      expect(appNavigator.navigationRoutes, contains(Page1.path));
+      expect(appNavigator.navigationRoutes, contains(Page3.path));
+      expect(appNavigator.navigationRoutes, isNot(contains(Page2.path)));
     });
 
     // Test pushAndReplaceAllStack. Pushing a page must replace all tree and have only 1 element at end
@@ -68,8 +68,8 @@ void main() {
       //  Verify
       expect(appNavigator.currentPath, equals(Page3.path));
       expect(appNavigator.pages.value.length, equals(1));
-      expect(appNavigator.navigationTree, isNot(contains(Page1.path)));
-      expect(appNavigator.navigationTree, isNot(contains(Page2.path)));
+      expect(appNavigator.navigationRoutes, isNot(contains(Page1.path)));
+      expect(appNavigator.navigationRoutes, isNot(contains(Page2.path)));
     });
 
     //Test pop. Remove the last element on the stack. This group will test all alternatives
@@ -84,7 +84,7 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page1.path));
           expect(appNavigator.pages.value.length, equals(1));
-          expect(appNavigator.navigationTree.length, equals(1));
+          expect(appNavigator.navigationRoutes.length, equals(1));
         },
       );
 
@@ -98,7 +98,7 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page1.path));
           expect(appNavigator.pages.value.length, equals(1));
-          expect(appNavigator.navigationTree.length, equals(1));
+          expect(appNavigator.navigationRoutes.length, equals(1));
         },
       );
     });
@@ -117,8 +117,8 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page1.path));
           expect(appNavigator.pages.value.length, equals(1));
-          expect(appNavigator.navigationTree, isNot(contains(Page2.path)));
-          expect(appNavigator.navigationTree, isNot(contains(Page3.path)));
+          expect(appNavigator.navigationRoutes, isNot(contains(Page2.path)));
+          expect(appNavigator.navigationRoutes, isNot(contains(Page3.path)));
         },
       );
 
@@ -134,8 +134,8 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page3.path));
           expect(appNavigator.pages.value.length, equals(3));
-          expect(appNavigator.navigationTree, contains(Page1.path));
-          expect(appNavigator.navigationTree, contains(Page2.path));
+          expect(appNavigator.navigationRoutes, contains(Page1.path));
+          expect(appNavigator.navigationRoutes, contains(Page2.path));
         },
       );
     });
@@ -154,8 +154,8 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
-          expect(appNavigator.navigationTree, isNot(contains(Page1.path)));
-          expect(appNavigator.navigationTree, contains(Page3.path));
+          expect(appNavigator.navigationRoutes, isNot(contains(Page1.path)));
+          expect(appNavigator.navigationRoutes, contains(Page3.path));
         },
       );
 
@@ -171,8 +171,8 @@ void main() {
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
-          expect(appNavigator.navigationTree, contains(Page1.path));
-          expect(appNavigator.navigationTree, isNot(contains(Page3.path)));
+          expect(appNavigator.navigationRoutes, contains(Page1.path));
+          expect(appNavigator.navigationRoutes, isNot(contains(Page3.path)));
         },
       );
     });
