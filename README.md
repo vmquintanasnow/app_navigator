@@ -1,39 +1,78 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+# App Navigator
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A declarative implementation of Flutter's Navigator for easy and clean code.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Easy to integrate & easy to use
+- Uses Flutter's Navigator v2.0
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add this package as a dependency
+
+```shell
+flutter pub add app_navigator
+```
+
+Import this package in your file
+```dart
+import 'package:app_navigator/app_navigator.dart';
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### Setup
 
+1. Create a `List<NavigationPath>`
 ```dart
-const like = 'sample';
+import 'package:flutter/material.dart';
+import 'package:app_navigator/app_navigator.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'AppNavigator Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: NavigationLayer(
+        initPage: Page1(),
+        initPath: Page1.route,
+      ),
+    );
+  }
+}
 ```
 
-## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+## Navigation
+### Push
+To navigate between routes, use the `AppNavigator.push` method:
+
+```dart
+onTap() => AppNavigator().push(Page(), name: 'page');
+```
+### Pop
+To navigate backward, use the `AppNavigator.pop` method:
+
+```dart
+onTap() => AppNavigator().pop();
+```
+
+### PopUntilNamed
+To navigate backward to a target page, use `AppNavigator.popUntilNamed`
+
+```dart
+onTap() => AppNavigator().popUntilNamed();
+```
+
+### Context-less navigation
+The class `AppNavigator` by using the singleton pattern allows navigation within the app without care about the context.
+
