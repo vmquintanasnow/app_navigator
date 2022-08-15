@@ -2,6 +2,7 @@
 ## 0.0.2
 * Add tests.
 * Add LICENSE
+* Add example folder with the main methods
 
 ## 0.0.1
 * Initial release.
