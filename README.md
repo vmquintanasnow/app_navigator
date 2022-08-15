@@ -25,7 +25,7 @@ import 'package:app_navigator/app_navigator.dart';
 
 ### Setup
 
-1. Create a `List<NavigationPath>`
+1. Init
 ```dart
 import 'package:flutter/material.dart';
 import 'package:app_navigator/app_navigator.dart';
