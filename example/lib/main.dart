@@ -37,7 +37,8 @@ class Page1 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -48,14 +49,18 @@ class Page1 extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(AppNavigator().navigationTree.fold('Stack', (initial, value) => '$initial -> $value')),
+              Text(AppNavigator()
+                  .navigationTree
+                  .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('Go to Page 2'),
-                onPressed: () => AppNavigator().push(Page2(), name: Page2.route),
+                onPressed: () =>
+                    AppNavigator().push(Page2(), name: Page2.route),
               ),
               ElevatedButton(
                 child: Text('Push replacement'),
-                onPressed: () => AppNavigator().pushAndReplaceAllStack(Page2(), name: Page2.route),
+                onPressed: () => AppNavigator()
+                    .pushAndReplaceAllStack(Page2(), name: Page2.route),
               ),
             ],
           ),
@@ -80,7 +85,8 @@ class Page2 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -90,10 +96,13 @@ class Page2 extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text(AppNavigator().navigationTree.fold('Stack', (initial, value) => '$initial -> $value')),
+              Text(AppNavigator()
+                  .navigationTree
+                  .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('Go to Page 3'),
-                onPressed: () => AppNavigator().push(Page3(), name: Page3.route),
+                onPressed: () =>
+                    AppNavigator().push(Page3(), name: Page3.route),
               ),
               ElevatedButton(
                 child: Text('Pop'),
@@ -124,7 +133,8 @@ class Page3 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -134,7 +144,9 @@ class Page3 extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text(AppNavigator().navigationTree.fold('Stack', (initial, value) => '$initial -> $value')),
+              Text(AppNavigator()
+                  .navigationTree
+                  .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('popUntilNamed Page1'),
                 onPressed: () => AppNavigator().popUntilNamed(Page1.route),

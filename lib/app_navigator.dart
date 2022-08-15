@@ -128,7 +128,8 @@ class AppNavigator {
     required String name,
     required String target,
   }) {
-    final targetIndex = pages.value.indexWhere((element) => element.name == target);
+    final targetIndex =
+        pages.value.indexWhere((element) => element.name == target);
     if (targetIndex >= 0) {
       final List<Page> pagesCopy = List.from(pages.value);
       pagesCopy[targetIndex] = AppPage(
