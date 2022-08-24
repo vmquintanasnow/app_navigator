@@ -50,7 +50,7 @@ class Page1 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(AppNavigator()
-                  .navigationTree
+                  .navigationRoutes
                   .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('Go to Page 2'),
@@ -97,12 +97,78 @@ class Page2 extends StatelessWidget {
           child: Column(
             children: [
               Text(AppNavigator()
-                  .navigationTree
+                  .navigationRoutes
                   .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('Go to Page 3'),
                 onPressed: () =>
                     AppNavigator().push(Page3(), name: Page3.route),
+              ),
+              ElevatedButton(
+                child: Text('Dialog'),
+                onPressed: () => AppNavigator().showDialog(
+                  builder: (context) => SimpleDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    contentPadding: const EdgeInsets.all(12),
+                    title: const Text(
+                      'Warning',
+                      textAlign: TextAlign.center,
+                    ),
+                    titleTextStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Do you really want to exit?',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              side: const BorderSide(
+                                color: Colors.red,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                            ),
+                            onPressed: () {
+                              AppNavigator().pop();
+                            },
+                            child: Text(
+                              'No',
+                              style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
+                            ),
+                            onPressed: () {
+                              // Navigator.of(context).pop(true);
+                              AppNavigator().pop();
+                            },
+                            child: Text('yes'),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
               ElevatedButton(
                 child: Text('Pop'),
@@ -145,7 +211,7 @@ class Page3 extends StatelessWidget {
           child: Column(
             children: [
               Text(AppNavigator()
-                  .navigationTree
+                  .navigationRoutes
                   .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: Text('popUntilNamed Page1'),
