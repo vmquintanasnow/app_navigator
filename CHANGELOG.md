@@ -1,3 +1,5 @@
+## 0.0.4
+* Add showDialog method
 
 ## 0.0.3
 * navigationTree is now called navigationRoutes

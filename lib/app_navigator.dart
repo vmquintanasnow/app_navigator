@@ -142,6 +142,64 @@ class AppNavigator {
     }
   }
 
+  /// Displays a Material dialog above the current contents of the app, with
+  /// Material entrance and exit animations, modal barrier color, and modal
+  /// barrier behavior (dialog is dismissible with a tap on the barrier).
+  ///
+  /// This function takes a `builder` which typically builds a [Dialog] widget.
+  /// Content below the dialog is dimmed with a [ModalBarrier]. The widget
+  /// returned by the `builder` does not share a context with the location that
+  /// `showDialog` is originally called from. Use a [StatefulBuilder] or a
+  /// custom [StatefulWidget] if the dialog needs to update dynamically.
+  ///
+  /// The `barrierDismissible` argument is used to indicate whether tapping on the
+  /// barrier will dismiss the dialog. It is `true` by default and can not be `null`.
+  ///
+  /// The `barrierColor` argument is used to specify the color of the modal
+  /// barrier that darkens everything below the dialog. If `null` the default color
+  /// `Colors.black54` is used.
+  ///
+  /// The `useSafeArea` argument is used to indicate if the dialog should only
+  /// display in 'safe' areas of the screen not used by the operating system
+  /// (see [SafeArea] for more details). It is `true` by default, which means
+  /// the dialog will not overlap operating system areas. If it is set to `false`
+  /// the dialog will only be constrained by the screen size. It can not be `null`.
+  ///
+  /// See also:
+  ///
+  ///  * [AlertDialog], for dialogs that have a row of buttons below a body.
+  ///  * [SimpleDialog], which handles the scrolling of the contents and does
+  ///    not show buttons below its body.
+  ///  * [Dialog], on which [SimpleDialog] and [AlertDialog] are based.
+  ///  * [showCupertinoDialog], which displays an iOS-style dialog.
+  ///  * [showGeneralDialog], which allows for customization of the dialog popup.
+  ///  * [DisplayFeatureSubScreen], which documents the specifics of how
+  ///    [DisplayFeature]s can split the screen into sub-screens.
+  ///  * <https://material.io/design/components/dialogs.html>
+  void showDialog({
+    required WidgetBuilder builder,
+    bool barrierDismissible = true,
+    Color? barrierColor = Colors.black54,
+    String? barrierLabel,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    Offset? anchorPoint,
+  }) {
+    pages.value = List.from(pages.value)
+      ..add(
+        DialogPage(
+          builder: builder,
+          name: 'dialog',
+          anchorPoint: anchorPoint,
+          barrierColor: barrierColor,
+          barrierDismissible: barrierDismissible,
+          barrierLabel: barrierLabel,
+          useSafeArea: useSafeArea,
+        ),
+      );
+  }
+
   /// Returns a [String] with the route of the active screen
   ///
   /// Example:
@@ -178,17 +236,72 @@ class AppPage extends Page<dynamic> {
   }) : super(key: UniqueKey(), name: name);
 
   final Widget child;
+
   final bool? fullScreenDialog;
 
   /// Creates the [Route] that corresponds to this page.
-  ///
-  /// The created [Route] must have its [Route.settings] property set to this [Page].
   @override
   Route<dynamic> createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
       fullscreenDialog: fullScreenDialog ?? false,
       builder: (context) => child,
+    );
+  }
+}
+
+/// This class display a Material Dialog
+/// This class is an specific implementation of [Page]. Is used to handle
+/// transitions between pages.
+/// This function takes a `builder` which typically builds a [Dialog] widget.
+///  Content below the dialog is dimmed with a [ModalBarrier]. The widget
+///  returned by the `builder` does not share a context with the location that
+///  `showDialog` is originally called from. Use a [StatefulBuilder] or a
+///  custom [StatefulWidget] if the dialog needs to update dynamically.
+///
+///  The `barrierDismissible` argument is used to indicate whether tapping on the
+///  barrier will dismiss the dialog. It is `true` by default and can not be `null`.
+///
+///  The `barrierColor` argument is used to specify the color of the modal
+///  barrier that darkens everything below the dialog. If `null` the default color
+///  `Colors.black54` is used.
+///
+///   The `useSafeArea` argument is used to indicate if the dialog should only
+///   display in 'safe' areas of the screen not used by the operating system
+///   (see [SafeArea] for more details). It is `true` by default, which means
+///   the dialog will not overlap operating system areas. If it is set to `false`
+///   the dialog will only be constrained by the screen size. It can not be `null`.
+
+class DialogPage extends Page<dynamic> {
+  final WidgetBuilder builder;
+  final bool barrierDismissible;
+  final Color? barrierColor;
+  final String? barrierLabel;
+  final bool useSafeArea;
+  final Offset? anchorPoint;
+
+  const DialogPage({
+    required String name,
+    required this.builder,
+    this.barrierDismissible = true,
+    this.barrierColor,
+    this.barrierLabel,
+    this.useSafeArea = true,
+    this.anchorPoint,
+  }) : super(name: name);
+
+  /// Creates the [Route] that corresponds to this page.
+  @override
+  Route createRoute(BuildContext context) {
+    return DialogRoute(
+      context: context,
+      builder: builder,
+      barrierColor: barrierColor,
+      barrierDismissible: barrierDismissible,
+      barrierLabel: barrierLabel,
+      useSafeArea: useSafeArea,
+      settings: this,
+      anchorPoint: anchorPoint,
     );
   }
 }
