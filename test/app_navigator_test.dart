@@ -1,4 +1,5 @@
 import 'package:app_navigator/app_navigator.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils/pages.dart';
@@ -10,9 +11,7 @@ void main() {
 
   group('Test AppNavigator', () {
     setUp(() {
-      appNavigator.pages.value = [
-        AppPage(child: const Page1(), name: Page1.path)
-      ];
+      appNavigator.pages.value = [AppPage(child: const Page1(), name: Page1.path)];
     });
 
     //Test the current path method
@@ -149,8 +148,7 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(),
-              name: Page3.path, target: Page1.path);
+          appNavigator.replacement(const Page3(), name: Page3.path, target: Page1.path);
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
@@ -166,13 +164,56 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(),
-              name: Page3.path, target: 'home');
+          appNavigator.replacement(const Page3(), name: Page3.path, target: 'home');
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
           expect(appNavigator.navigationRoutes, contains(Page1.path));
           expect(appNavigator.navigationRoutes, isNot(contains(Page3.path)));
+        },
+      );
+    });
+
+    //Test showDialog
+    group('showDialog group', () {
+      //Test replacement
+      test(
+        'showDialog',
+        () {
+          //  Setup
+          //  Act
+          appNavigator.showDialog(builder: (context) {
+            return const SizedBox();
+          });
+          //  Verify
+          expect(appNavigator.currentPath, equals('dialog'));
+          expect(appNavigator.pages.value.length, equals(2));
+          expect(appNavigator.navigationRoutes, contains(Page1.path));
+          expect(appNavigator.navigationRoutes, contains('dialog'));
+        },
+      );
+
+      //Test replacement. With a wrong target the method doesn't make actions.
+      test(
+        'close dialog',
+        () {
+          //  Setup
+          //  Act
+          appNavigator.showDialog(builder: (context) {
+            return const SizedBox();
+          });
+          //  Verify
+          expect(appNavigator.currentPath, equals('dialog'));
+          expect(appNavigator.pages.value.length, equals(2));
+          expect(appNavigator.navigationRoutes, contains(Page1.path));
+          expect(appNavigator.navigationRoutes, contains('dialog'));
+          //  Act
+          appNavigator.pop();
+          //  Verify
+          expect(appNavigator.currentPath, equals(Page1.path));
+          expect(appNavigator.pages.value.length, equals(1));
+          expect(appNavigator.navigationRoutes, contains(Page1.path));
+          expect(appNavigator.navigationRoutes, isNot(contains('dialog')));
         },
       );
     });
