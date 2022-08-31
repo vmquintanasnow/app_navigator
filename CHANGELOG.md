@@ -1,3 +1,6 @@
+## 0.0.5
+* Fix hot reload issues
+
 ## 0.0.4
 * Add showDialog method
 

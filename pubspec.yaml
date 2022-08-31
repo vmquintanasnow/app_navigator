@@ -1,6 +1,6 @@
 name: app_navigator
 description: This package helps to manage the navigate between screens in an easy way. A Navigator 2.0 implementation.
-version: 0.0.4
+version: 0.0.5
 repository: https://github.com/vmquintanasnow/app_navigator
 
 environment:
