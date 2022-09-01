@@ -1,0 +1,13 @@
+build/
+analysis_options.yaml
+app_navigator.iml
+example/android/
+example/ios/
+example/test/
+example/.idea/
+example/.dart_tool/
+example/.gitignore
+example/.metadata
+example/analysis_options.yaml
+example/example.iml
+example/pubspec.lock

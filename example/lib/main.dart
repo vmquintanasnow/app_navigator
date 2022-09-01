@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 class Page1 extends StatelessWidget {
   static const String route = 'home';
 
-  const Page1({super.key});
+  const Page1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class Page1 extends StatelessWidget {
 class Page2 extends StatelessWidget {
   static const String route = 'page2';
 
-  const Page2({super.key});
+  const Page2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class Page2 extends StatelessWidget {
 class Page3 extends StatelessWidget {
   static const String route = 'page3';
 
-  const Page3({super.key});
+  const Page3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
