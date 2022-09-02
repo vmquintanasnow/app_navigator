@@ -139,7 +139,8 @@ class AppNavigator {
     required String name,
     required String target,
   }) {
-    final targetIndex = pages.value.indexWhere((element) => element.name == target);
+    final targetIndex =
+        pages.value.indexWhere((element) => element.name == target);
     if (targetIndex >= 0) {
       final List<GeneralPage> pagesCopy = List.from(pages.value);
       final page = AppPage(
@@ -257,8 +258,8 @@ abstract class GeneralPage extends Page<dynamic> {
 /// This class is an specific implementation of [GeneralPage] and [Page]. Is used to handle
 /// transitions between pages.
 /// /// The `fullscreenDialog` property specifies whether the incoming route is a
-// /// fullscreen modal dialog. On iOS, those routes animate from the bottom to the
-// /// top rather than horizontally.
+/// fullscreen modal dialog. On iOS, those routes animate from the bottom to the
+/// top rather than horizontally.
 class AppPage extends GeneralPage {
   AppPage({
     required this.child,
@@ -302,7 +303,6 @@ class AppPage extends GeneralPage {
 ///   (see [SafeArea] for more details). It is `true` by default, which means
 ///   the dialog will not overlap operating system areas. If it is set to `false`
 ///   the dialog will only be constrained by the screen size. It can not be `null`.
-
 class DialogPage extends GeneralPage {
   final WidgetBuilder builder;
   final bool barrierDismissible;

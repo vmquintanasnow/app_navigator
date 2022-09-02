@@ -41,7 +41,8 @@ class Page1 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -51,17 +52,21 @@ class Page1 extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(AppNavigator().navigationRoutes.fold('Stack', (initial, value) => '$initial -> $value')),
+            Text(AppNavigator()
+                .navigationRoutes
+                .fold('Stack', (initial, value) => '$initial -> $value')),
             ElevatedButton(
               child: const Text('Go to Page 2'),
               onPressed: () async {
-                final response = await AppNavigator().push(const Page2(), name: Page2.route);
+                final response =
+                    await AppNavigator().push(const Page2(), name: Page2.route);
                 print(response);
               },
             ),
             ElevatedButton(
               child: const Text('Push replacement'),
-              onPressed: () => AppNavigator().pushAndReplaceAllStack(const Page2(), name: Page2.route),
+              onPressed: () => AppNavigator()
+                  .pushAndReplaceAllStack(const Page2(), name: Page2.route),
             ),
           ],
         ),
@@ -87,7 +92,8 @@ class Page2 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -96,17 +102,21 @@ class Page2 extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text(AppNavigator().navigationRoutes.fold('Stack', (initial, value) => '$initial -> $value')),
+            Text(AppNavigator()
+                .navigationRoutes
+                .fold('Stack', (initial, value) => '$initial -> $value')),
             ElevatedButton(
               child: const Text('Go to Page 3'),
-              onPressed: () => AppNavigator().push(const Page3(), name: Page3.route),
+              onPressed: () =>
+                  AppNavigator().push(const Page3(), name: Page3.route),
             ),
             ElevatedButton(
               child: const Text('Dialog'),
               onPressed: () async {
                 final response = await AppNavigator().showDialog(
                   builder: (context) => SimpleDialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
                     contentPadding: const EdgeInsets.all(12),
                     title: const Text(
                       'Warning',
@@ -134,20 +144,26 @@ class Page2 extends StatelessWidget {
                               side: const BorderSide(
                                 color: Colors.red,
                               ),
-                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
                             ),
                             onPressed: () {
                               AppNavigator().pop(false);
                             },
                             child: const Text(
                               'No',
-                              style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
                             ),
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                              textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
                             ),
                             onPressed: () {
                               AppNavigator().pop(true);
@@ -196,7 +212,8 @@ class Page3 extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 AppNavigator().currentPath ?? 'no path',
-                style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.w200),
               ),
             ),
           ],
@@ -206,7 +223,9 @@ class Page3 extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text(AppNavigator().navigationRoutes.fold('Stack', (initial, value) => '$initial -> $value')),
+              Text(AppNavigator()
+                  .navigationRoutes
+                  .fold('Stack', (initial, value) => '$initial -> $value')),
               ElevatedButton(
                 child: const Text('popUntilNamed Page1'),
                 onPressed: () => AppNavigator().popUntilNamed(Page1.route),

@@ -6,7 +6,9 @@ class NavigationLayer extends StatefulWidget {
   final Widget initPage;
   final String initPath;
 
-  const NavigationLayer({Key? key, required this.initPage, required this.initPath}) : super(key: key);
+  const NavigationLayer(
+      {Key? key, required this.initPage, required this.initPath})
+      : super(key: key);
 
   @override
   State<NavigationLayer> createState() => _NavigationLayerState();
@@ -15,7 +17,9 @@ class NavigationLayer extends StatefulWidget {
 class _NavigationLayerState extends State<NavigationLayer> {
   @override
   void initState() {
-    AppNavigator().pages.value = [AppPage(child: widget.initPage, name: widget.initPath)];
+    AppNavigator().pages.value = [
+      AppPage(child: widget.initPage, name: widget.initPath)
+    ];
     super.initState();
   }
 

@@ -11,7 +11,9 @@ void main() {
 
   group('Test AppNavigator', () {
     setUp(() {
-      appNavigator.pages.value = [AppPage(child: const Page1(), name: Page1.path)];
+      appNavigator.pages.value = [
+        AppPage(child: const Page1(), name: Page1.path)
+      ];
     });
 
     //Test the current path method
@@ -162,7 +164,8 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(), name: Page3.path, target: Page1.path);
+          appNavigator.replacement(const Page3(),
+              name: Page3.path, target: Page1.path);
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
@@ -178,7 +181,8 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(), name: Page3.path, target: 'home');
+          appNavigator.replacement(const Page3(),
+              name: Page3.path, target: 'home');
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
