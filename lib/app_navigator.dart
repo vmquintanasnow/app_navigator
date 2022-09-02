@@ -1,5 +1,7 @@
 library app_navigator;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 part 'navigation_layer.dart';
@@ -13,7 +15,7 @@ class AppNavigator {
   factory AppNavigator() => _singleton;
 
   /// The stack of pages of the app_navigator
-  ValueNotifier<List<Page>> pages = ValueNotifier(<Page>[]);
+  ValueNotifier<List<GeneralPage>> pages = ValueNotifier(<GeneralPage>[]);
 
   /// Push the given route onto the app_navigator.
   ///
@@ -21,18 +23,21 @@ class AppNavigator {
   ///
   /// ```dart
   /// void _openPage() => AppNavigator().push(const Home(), name: 'home');
+  /// dynamic _openPage() async => await AppNavigator().push(const Home(), name: 'home');
   /// ```
-  void push(
+  Future<dynamic> push(
     Widget child, {
     bool fullScreenDialog = false,
     required String name,
   }) {
-    pages.value = List.from(pages.value)
-      ..add(AppPage(
-        child: child,
-        fullScreenDialog: fullScreenDialog,
-        name: name,
-      ));
+    final page = AppPage(
+      child: child,
+      fullScreenDialog: fullScreenDialog,
+      name: name,
+    );
+    pages.value = List.from(pages.value)..add(page);
+
+    return page.popped;
   }
 
   /// Replace all routes of the app_navigator by pushing the given route and
@@ -44,18 +49,19 @@ class AppNavigator {
   /// ```dart
   /// void _openPage() => AppNavigator().pushAndReplaceAllStack(const Home(), name: 'home');
   /// ```
-  void pushAndReplaceAllStack(
+  Future<dynamic> pushAndReplaceAllStack(
     Widget child, {
     bool fullScreenDialog = false,
     required String name,
   }) {
-    pages.value = [
-      AppPage(
-        child: child,
-        fullScreenDialog: fullScreenDialog,
-        name: name,
-      )
-    ];
+    final page = AppPage(
+      child: child,
+      fullScreenDialog: fullScreenDialog,
+      name: name,
+    );
+    pages.value = [page];
+
+    return page.popped;
   }
 
   /// Replace the current route of the app_navigator by pushing the given route and
@@ -67,16 +73,19 @@ class AppNavigator {
   /// ```dart
   /// void _openPage() => AppNavigator().pushReplacement(const Home(), name: 'home');
   /// ```
-  void pushReplacement(
+  Future<dynamic> pushReplacement(
     Widget child, {
     required String name,
   }) {
-    pages.value = List.from(pages.value)
-      ..last = AppPage(
-        child: child,
-        name: name,
-        fullScreenDialog: false,
-      );
+    final page = AppPage(
+      child: child,
+      name: name,
+      fullScreenDialog: false,
+    );
+    pages.value.last.pop();
+    pages.value = List.from(pages.value)..last = page;
+
+    return page.popped;
   }
 
   /// Pop the top-most route off the navigator.
@@ -88,8 +97,9 @@ class AppNavigator {
   ///   AppNavigator.pop();
   /// }
   /// ```
-  void pop() {
+  void pop([dynamic value]) {
     if (pages.value.length > 1) {
+      pages.value.last.pop(value);
       pages.value = List.from(pages.value)..removeLast();
     }
   }
@@ -105,10 +115,11 @@ class AppNavigator {
   /// }
   /// ```
   /// {@end-tool}
-  void popUntilNamed(String path) {
+  void popUntilNamed(String path, [dynamic value]) {
     if (pages.value.any((element) => element.name == path)) {
-      final List<Page> pagesCopy = List.from(pages.value);
+      final List<GeneralPage> pagesCopy = List.from(pages.value);
       while (pagesCopy.last.name != path) {
+        pagesCopy.last.pop(value);
         pagesCopy.removeLast();
       }
       pages.value = pagesCopy;
@@ -123,22 +134,27 @@ class AppNavigator {
   /// ```dart
   /// void _openPage() => AppNavigator().replacement(const Home(), name: 'home', target: 'login');
   /// ```
-  void replacement(
+  Future<dynamic> replacement(
     Widget child, {
     required String name,
     required String target,
   }) {
-    final targetIndex =
-        pages.value.indexWhere((element) => element.name == target);
+    final targetIndex = pages.value.indexWhere((element) => element.name == target);
     if (targetIndex >= 0) {
-      final List<Page> pagesCopy = List.from(pages.value);
-      pagesCopy[targetIndex] = AppPage(
+      final List<GeneralPage> pagesCopy = List.from(pages.value);
+      final page = AppPage(
         child: child,
         name: name,
         fullScreenDialog: false,
       );
+      pagesCopy[targetIndex].pop();
+      pagesCopy[targetIndex] = page;
 
       pages.value = pagesCopy;
+
+      return page.popped;
+    } else {
+      return Future.value(null);
     }
   }
 
@@ -176,7 +192,7 @@ class AppNavigator {
   ///  * [DisplayFeatureSubScreen], which documents the specifics of how
   ///    [DisplayFeature]s can split the screen into sub-screens.
   ///  * <https://material.io/design/components/dialogs.html>
-  void showDialog({
+  Future<dynamic> showDialog({
     required WidgetBuilder builder,
     bool barrierDismissible = true,
     Color? barrierColor = Colors.black54,
@@ -186,18 +202,18 @@ class AppNavigator {
     RouteSettings? routeSettings,
     Offset? anchorPoint,
   }) {
-    pages.value = List.from(pages.value)
-      ..add(
-        DialogPage(
-          builder: builder,
-          name: 'dialog',
-          anchorPoint: anchorPoint,
-          barrierColor: barrierColor,
-          barrierDismissible: barrierDismissible,
-          barrierLabel: barrierLabel,
-          useSafeArea: useSafeArea,
-        ),
-      );
+    final page = DialogPage(
+      builder: builder,
+      name: 'dialog',
+      anchorPoint: anchorPoint,
+      barrierColor: barrierColor,
+      barrierDismissible: barrierDismissible,
+      barrierLabel: barrierLabel,
+      useSafeArea: useSafeArea,
+    );
+    pages.value = List.from(pages.value)..add(page);
+
+    return page.popped;
   }
 
   /// Returns a [String] with the route of the active screen
@@ -221,14 +237,29 @@ class AppNavigator {
   }
 }
 
+///This class contains all actions required to return values using [pop] feature.
+///All Pages on the AppNavigator will extend from this class.
+///Extends from [Page] but doesn't implement the [createRoute], the implementation
+///of this method is responsibility of the classes that inherit from [GeneralPage].
+abstract class GeneralPage extends Page<dynamic> {
+  GeneralPage({LocalKey? key, String? name}) : super(key: key, name: name);
+
+  Future<dynamic> get popped => _popCompleter.future;
+  final Completer<dynamic> _popCompleter = Completer<dynamic>();
+
+  void pop([dynamic response]) {
+    _popCompleter.complete(response);
+  }
+}
+
 /// A modal route that replaces the entire screen with a platform-adaptive
 /// transition.
-/// This class is an specific implementation of [Page]. Is used to handle
+/// This class is an specific implementation of [GeneralPage] and [Page]. Is used to handle
 /// transitions between pages.
 /// /// The `fullscreenDialog` property specifies whether the incoming route is a
 // /// fullscreen modal dialog. On iOS, those routes animate from the bottom to the
 // /// top rather than horizontally.
-class AppPage extends Page<dynamic> {
+class AppPage extends GeneralPage {
   AppPage({
     required this.child,
     required String name,
@@ -251,7 +282,7 @@ class AppPage extends Page<dynamic> {
 }
 
 /// This class display a Material Dialog
-/// This class is an specific implementation of [Page]. Is used to handle
+/// This class is an specific implementation of [GeneralPage] and [Page]. Is used to handle
 /// transitions between pages.
 /// This function takes a `builder` which typically builds a [Dialog] widget.
 ///  Content below the dialog is dimmed with a [ModalBarrier]. The widget
@@ -272,7 +303,7 @@ class AppPage extends Page<dynamic> {
 ///   the dialog will not overlap operating system areas. If it is set to `false`
 ///   the dialog will only be constrained by the screen size. It can not be `null`.
 
-class DialogPage extends Page<dynamic> {
+class DialogPage extends GeneralPage {
   final WidgetBuilder builder;
   final bool barrierDismissible;
   final Color? barrierColor;
@@ -280,7 +311,7 @@ class DialogPage extends Page<dynamic> {
   final bool useSafeArea;
   final Offset? anchorPoint;
 
-  const DialogPage({
+  DialogPage({
     required String name,
     required this.builder,
     this.barrierDismissible = true,

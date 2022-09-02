@@ -54,7 +54,10 @@ class Page1 extends StatelessWidget {
             Text(AppNavigator().navigationRoutes.fold('Stack', (initial, value) => '$initial -> $value')),
             ElevatedButton(
               child: const Text('Go to Page 2'),
-              onPressed: () => AppNavigator().push(const Page2(), name: Page2.route),
+              onPressed: () async {
+                final response = await AppNavigator().push(const Page2(), name: Page2.route);
+                print(response);
+              },
             ),
             ElevatedButton(
               child: const Text('Push replacement'),
@@ -100,67 +103,73 @@ class Page2 extends StatelessWidget {
             ),
             ElevatedButton(
               child: const Text('Dialog'),
-              onPressed: () => AppNavigator().showDialog(
-                builder: (context) => SimpleDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  contentPadding: const EdgeInsets.all(12),
-                  title: const Text(
-                    'Warning',
-                    textAlign: TextAlign.center,
-                  ),
-                  titleTextStyle: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Do you really want to exit?',
-                        textAlign: TextAlign.center,
-                      ),
+              onPressed: () async {
+                final response = await AppNavigator().showDialog(
+                  builder: (context) => SimpleDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    contentPadding: const EdgeInsets.all(12),
+                    title: const Text(
+                      'Warning',
+                      textAlign: TextAlign.center,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: const BorderSide(
-                              color: Colors.red,
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          ),
-                          onPressed: () {
-                            AppNavigator().pop();
-                          },
-                          child: const Text(
-                            'No',
-                            style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
+                    titleTextStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Do you really want to exit?',
+                          textAlign: TextAlign.center,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(
+                                color: Colors.red,
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            ),
+                            onPressed: () {
+                              AppNavigator().pop(false);
+                            },
+                            child: const Text(
+                              'No',
+                              style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+                            ),
                           ),
-                          onPressed: () {
-                            // Navigator.of(context).pop(true);
-                            AppNavigator().pop();
-                          },
-                          child: const Text('yes'),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                              textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                            ),
+                            onPressed: () {
+                              AppNavigator().pop(true);
+                            },
+                            child: const Text('yes'),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+                if (response != null && response == true) {
+                  print('YES');
+                } else {
+                  print('NO');
+                }
+              },
             ),
             ElevatedButton(
               child: const Text('Pop'),
               onPressed: () {
-                AppNavigator().pop();
+                AppNavigator().pop('Verde');
               },
             ),
           ],
@@ -206,6 +215,12 @@ class Page3 extends StatelessWidget {
                 child: const Text('Pop'),
                 onPressed: () {
                   AppNavigator().pop();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Default Navigator Pop'),
+                onPressed: () {
+                  Navigator.of(context).pop('NAVIGATOR DEFAULT');
                 },
               ),
             ],

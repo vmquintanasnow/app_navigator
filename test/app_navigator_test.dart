@@ -11,9 +11,7 @@ void main() {
 
   group('Test AppNavigator', () {
     setUp(() {
-      appNavigator.pages.value = [
-        AppPage(child: const Page1(), name: Page1.path)
-      ];
+      appNavigator.pages.value = [AppPage(child: const Page1(), name: Page1.path)];
     });
 
     //Test the current path method
@@ -26,8 +24,8 @@ void main() {
       expect(appNavigator.pages.value.length, equals(1));
     });
 
-    //Test the navigation_tree method
-    test('navigation_tree', () {
+    //Test the navigation_routes method
+    test('navigation_routes', () {
       //  Setup
       //  Act
       final navigationRoutes = appNavigator.navigationRoutes;
@@ -102,6 +100,20 @@ void main() {
           expect(appNavigator.navigationRoutes.length, equals(1));
         },
       );
+
+      test(
+        'pop_response',
+        () async {
+          //  Setup
+          const responseValue = 'ResponseValue';
+          final pushFuture = appNavigator.push(const Page2(), name: Page2.path);
+          //  Act
+          appNavigator.pop(responseValue);
+          final response = await pushFuture;
+          //  Verify
+          expect(response, equals(responseValue));
+        },
+      );
     });
 
     //Test pop. Remove all the last element on the stack until the target. This group will test all alternatives
@@ -150,8 +162,7 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(),
-              name: Page3.path, target: Page1.path);
+          appNavigator.replacement(const Page3(), name: Page3.path, target: Page1.path);
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
@@ -167,8 +178,7 @@ void main() {
           //  Setup
           appNavigator.push(const Page2(), name: Page2.path);
           //  Act
-          appNavigator.replacement(const Page3(),
-              name: Page3.path, target: 'home');
+          appNavigator.replacement(const Page3(), name: Page3.path, target: 'home');
           //  Verify
           expect(appNavigator.currentPath, equals(Page2.path));
           expect(appNavigator.pages.value.length, equals(2));
